@@ -2,9 +2,7 @@ package name.shokred;
 
 import org.junit.Assert;
 import org.junit.Test;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import name.shokred.model.Album;
@@ -20,7 +18,7 @@ public class Chapter3 {
 
     @Test
     public void task1b() {
-        Assert.assertEquals(Arrays.asList("artist1", "artist2", "russia"), names(new Artist("band1", Arrays.asList(new Artist("artist1"), new Artist("artist2")), "russia")));
+        Assert.assertEquals(Arrays.asList("artist1", "artist2", "russia"), names(new Artist("band1", artists(), "russia")));
     }
 
     @Test
@@ -29,6 +27,41 @@ public class Chapter3 {
                 Collections.singletonList(shortAlbum()),
                 findShortsAlbums(Arrays.asList(shortAlbum(), longAlbum()))
         );
+    }
+
+    @Test
+    public void task2() {
+        List<Artist> artists = artists();
+
+        Assert.assertEquals(2, artists.stream().map(Artist::getMembers).count());
+        /*int totalMembers = 0;
+        for (Artist artist : artists) {
+            Stream<Artist> members = artist.getMembers().stream();
+            totalMembers += members.count();
+        }*/
+    }
+
+    @Test
+    public void task6() {
+        Assert.assertEquals(11L, lowerLettersCount("assertEquals"));
+    }
+
+    @Test
+    public void task7() {
+        Assert.assertEquals("assertEquals", maxLowerCaseString(Arrays.asList("assertEquals", "hello")).get());
+    }
+
+    @Test
+    public void task7ifListEmpty() {
+        Assert.assertFalse(maxLowerCaseString(Collections.emptyList()).isPresent());
+    }
+
+    private Optional<String> maxLowerCaseString(List<String> list) {
+        return list.stream().max(Comparator.comparingLong(this::lowerLettersCount));
+    }
+
+    private long lowerLettersCount(String string) {
+        return string.chars().filter(Character::isLowerCase).count();
     }
 
     private int addUp(Stream<Integer> numbers) {
@@ -67,5 +100,9 @@ public class Chapter3 {
                 ),
                 Collections.singletonList(new Artist("artist2"))
         );
+    }
+
+    private List<Artist> artists() {
+        return Arrays.asList(new Artist("artist1"), new Artist("artist2"));
     }
 }

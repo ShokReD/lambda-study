@@ -1,0 +1,13 @@
+apply plugin: 'java' 
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compileOnly('org.projectlombok:lombok:1.18.4')
+    annotationProcessor('org.projectlombok:lombok:1.18.4')
+    testCompile('junit:junit:4.12')
+}

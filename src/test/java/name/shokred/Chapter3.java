@@ -3,6 +3,7 @@ package name.shokred;
 import org.junit.Assert;
 import org.junit.Test;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import name.shokred.model.Album;
@@ -54,6 +55,24 @@ public class Chapter3 {
     @Test
     public void task7ifListEmpty() {
         Assert.assertFalse(maxLowerCaseString(Collections.emptyList()).isPresent());
+    }
+
+    @Test
+    public void hardTask1() {
+        Stream<Integer> integerStream = Stream.of(1, 2, 3);
+        Assert.assertEquals(Arrays.asList(2, 4, 6), map(integerStream, x -> x * 2));
+    }
+
+    private <I, O> List<O> map(Stream<I> input, Function<I, O> mapper) {
+        return input.reduce(new ArrayList<>(), (ts, i) -> {
+            List<O> os = new ArrayList<>(ts);
+            os.add(mapper.apply(i));
+            return os;
+        }, (List<O> ts, List<O> ts2) -> {
+            List<O> os = new ArrayList<>(ts);
+            os.addAll(ts2);
+            return os;
+        });
     }
 
     private Optional<String> maxLowerCaseString(List<String> list) {

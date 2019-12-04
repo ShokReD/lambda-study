@@ -2,10 +2,7 @@ package name.shokred;
 
 import org.junit.Assert;
 import org.junit.Test;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,6 +23,36 @@ public class Chapter5 {
         Assert.assertEquals(Arrays.asList(1, 2, 3, 4), concatenate(Arrays.asList(1, 2, 3), Collections.singletonList(4)));
         Assert.assertEquals(Arrays.asList(1, 2, 3, 4), concatenate(Arrays.asList(1, 2, 3, 4), Collections.emptyList()));
     }
+
+    @Test
+    public void task2a() {
+        List<String> names = Arrays.asList("John Lennon", "Paul McCartney", "George Harrison", "Ringo Starr", "Pete Best", "Stuart Sutcliffe");
+        Assert.assertEquals("Stuart Sutcliffe", maxByCollector(names.stream()));
+        Assert.assertEquals("Stuart Sutcliffe", maxByReduce(names.stream()));
+    }
+
+    @Test
+    public void task2b() {
+        Stream<String> stream = Stream.of("John", "Paul", "George", "John", "Paul", "John");
+        Map<String, Long> map = new HashMap<>();
+        map.put("John", 3L);
+        map.put("Paul", 2L);
+        map.put("George", 1L);
+        Assert.assertEquals(map, group(stream));
+    }
+
+    private Map<String, Long> group(Stream<String> input) {
+        return input.collect(Collectors.groupingBy(x -> x, Collectors.counting()));
+    }
+
+    private String maxByReduce(Stream<String> names) {
+        return names.reduce((r1, r2) -> r1.length() > r2.length() ? r1 : r2).orElse(null);
+    }
+
+    private String maxByCollector(Stream<String> names) {
+        return names.collect(Collectors.maxBy((Comparator<Object>) (o1, o2) -> ((String) o1).length() - ((String) o2).length())).orElse(null);
+    }
+
 
     private List<String> toUpperCase(List<String> input) {
         return input.stream().map(String::toUpperCase).collect(Collectors.toList());

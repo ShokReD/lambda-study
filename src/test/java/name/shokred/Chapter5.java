@@ -3,6 +3,11 @@ package name.shokred;
 import org.junit.Assert;
 import org.junit.Test;
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,6 +44,50 @@ public class Chapter5 {
         map.put("Paul", 2L);
         map.put("George", 1L);
         Assert.assertEquals(map, group(stream));
+    }
+
+    @Test
+    public void task2c() {
+        Stream<String> stream = Stream.of("John", "Paul", "George", "John", "Paul", "John");
+        Map<String, List<String>> map = new HashMap<>();
+        map.put("John", Arrays.asList("John", "John", "John"));
+        map.put("Paul", Arrays.asList("Paul", "Paul"));
+        map.put("George", Collections.singletonList("George"));
+        Assert.assertEquals(map, stream.collect(new GroupingBy<>()));
+    }
+
+    public static class GroupingBy<T> implements Collector<T, Map<T, List<T>>, Map<T, List<T>>> {
+
+        @Override
+        public Supplier<Map<T, List<T>>> supplier() {
+            return HashMap::new;
+        }
+
+        @Override
+        public BiConsumer<Map<T, List<T>>, T> accumulator() {
+            return (kListMap, t) -> {
+                kListMap.computeIfAbsent(t, k -> new ArrayList<>()).add(t);
+            };
+        }
+
+        @Override
+        public BinaryOperator<Map<T, List<T>>> combiner() {
+            return (kListMap, kListMap2) -> {
+                kListMap.forEach((k, ts) -> ts.addAll(kListMap2.get(k)));
+                return kListMap;
+            };
+        }
+
+        @Override
+        public Function<Map<T, List<T>>, Map<T, List<T>>> finisher() {
+            return kListMap -> kListMap;
+        }
+
+        @Override
+        public Set<Characteristics> characteristics() {
+            Set<Characteristics> characteristics = new HashSet<>();
+            return characteristics;
+        }
     }
 
     @Test

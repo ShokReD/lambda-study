@@ -41,6 +41,28 @@ public class Chapter5 {
         Assert.assertEquals(map, group(stream));
     }
 
+    @Test
+    public void task3() {
+        Assert.assertEquals(1L, fib(1));
+        Assert.assertEquals(1L, fib(2));
+        Assert.assertEquals(8L, fib(6));
+        Assert.assertEquals(5L, fib(5));
+    }
+
+    private long fib(int index, Map<Integer, Long> map) {
+        return map.computeIfAbsent(index, x -> fib(x - 1, map) + fib(x - 2, map));
+    }
+
+    private long fib(int index) {
+        if (index <= 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        HashMap<Integer, Long> map = new HashMap<>();
+        map.put(1, 1L);
+        map.put(2, 1L);
+        return fib(index, map);
+    }
+
     private Map<String, Long> group(Stream<String> input) {
         return input.collect(Collectors.groupingBy(x -> x, Collectors.counting()));
     }

@@ -17,8 +17,16 @@ public class Moon {
 
     public static void main(String[] args) {
         Moon moon = new Moon();
-        moon.startSpying(new Nasa());
-        moon.startSpying(new Aliens());
+        moon.startSpying(name -> {
+            if (name.contains("Apollo")) {
+                System.out.println("We did it!");
+            }
+        });
+        moon.startSpying(name -> {
+            if (name.contains("Apollo")) {
+                System.out.println("Они отвлеклись, вторгаемся на землю!");
+            }
+        });
 
         moon.land("An asteroid");
         moon.land("Apollo 11");

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.*;
 import java.nio.file.*;
+import java.util.zip.*;
 
 @RequiredArgsConstructor
 public class Compressor {
@@ -16,7 +17,7 @@ public class Compressor {
     }
 
     public static void main(String[] args) {
-        Compressor gzipCompressor = new Compressor(new GzipCompressionStrategy());
-        Compressor zipCompressor = new Compressor(new ZipCompressionStrategy());
+        Compressor gzipCompressor = new Compressor(GZIPOutputStream::new);
+        Compressor zipCompressor = new Compressor(ZipOutputStream::new);
     }
 }

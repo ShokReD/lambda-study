@@ -1,4 +1,4 @@
-package name.shokred.pattern;
+package name.shokred.pattern.command;
 
 public interface Action {
 

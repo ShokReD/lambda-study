@@ -1,14 +1,14 @@
-package name.shokred.pattern;
+package name.shokred.pattern.command;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class Close implements Action {
+public class Open implements Action {
 
     private final Editor editor;
 
     @Override
     public void perform() {
-        editor.close();
+        editor.open();
     }
 }
